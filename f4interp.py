@@ -29,6 +29,8 @@ def evaluate(expr):
         return evaluate(expr[1]) <= evaluate(expr[2])
     elif op == 'GEQ':
         return evaluate(expr[1]) >= evaluate(expr[2])
+    elif op == 'IND':
+        return varmap[expr[1]][1][evaluate(expr[2]) - 1]
     elif op == 'INT':
         return int(expr[1])
     elif op == 'REAL':
@@ -44,7 +46,7 @@ def process(stat):
         return
     elif instr == 'DEBUGVAR':
         for k in varmap.keys():
-            print "%s  \t%s = %s" % (varmap[k][0],k, varmap[k][1])
+            print "%s  \t%s = %s" % (varmap[k][0], k, varmap[k][1])
     elif instr == 'NEW':
         typename, ident, value = stat[1], stat[2], stat[3]
         varmap[ident] = [typename, evaluate(value)]
@@ -53,13 +55,20 @@ def process(stat):
         varmap[ident] = [typename + '.' + str(size), [defvals[typename]] * int(size)]
     elif instr == 'IN':
         ident = stat[1]
-        varmap[ident[1]][1] = input('Enter value for %s:' % ident[1])
+        if len(ident) == 2:
+            varmap[ident[1]][1] = input('Enter value for %s:' % ident[1])
+        else:
+            varmap[ident[1]][1][evaluate(ident[2]) - 1] = input(
+                'Enter value for %s.%s:' % (ident[1], evaluate(ident[2])))
     elif instr == 'OUT':
         expr = stat[1]
         print evaluate(expr)
     elif instr == 'MOV':
         ident, expr = stat[1], stat[2]
-        varmap[ident][1] = evaluate(expr)
+        if len(ident) == 1:
+            varmap[ident][1] = evaluate(expr)
+        else:
+            varmap[ident[1]][1][evaluate(ident[2]) - 1] = evaluate(expr)
     elif instr == 'IF':
         cond, iftrue, iffalse = stat[1], stat[2], stat[3]
         if evaluate(cond):

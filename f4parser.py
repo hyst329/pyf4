@@ -69,6 +69,11 @@ def p_statement_in(p):
     p[0] = ('IN', ('ID', p[2]))
 
 
+def p_statement_inelem(p):
+    """statement : in ident point factor"""
+    p[0] = ('IN', ('ELEM', p[2], p[4]))
+
+
 def p_statement_out(p):
     """statement : out expression"""
     p[0] = ('OUT', p[2])
@@ -155,6 +160,11 @@ def p_factor_expr(p):
     p[0] = p[2]
 
 
+def p_factor_arrelem(p):
+    """factor : ident point factor"""
+    p[0] = ('IND', p[1], p[3])
+
+
 def p_declaration_ident(p):
     """declaration : type ident
                    | type ident assign expression"""
@@ -172,6 +182,11 @@ def p_declaration_array(p):
 def p_assignment(p):
     """assignment : ident assign expression"""
     p[0] = ('MOV', p[1], p[3])
+
+
+def p_assignment_elem(p):
+    """assignment : ident point factor assign expression"""
+    p[0] = ('MOV', ('ELEM', p[1], p[3]), p[5])
 
 
 # Error rule for syntax errors
