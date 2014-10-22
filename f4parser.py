@@ -9,7 +9,7 @@ __author__ = 'hyst329'
 tokens = f4lex.tokens
 
 precedence = (
-    ('nonassoc', 'equals', 'leq', 'geq'),
+    ('nonassoc', 'equals', 'leq', 'geq', 'less', 'greater'),
     ('left', 'plus', 'minus'),
     ('left', 'mult', 'divide'),
 )
@@ -57,7 +57,6 @@ def p_instruction_ifelse(p):
 def p_instruction_loop(p):
     """instruction : loop statement comma expression comma statement newline instseq endloop"""
     p[0] = ('LOOP', p[2], p[4], p[6], p[8])
-
 
 def p_statement_decl(p):
     """statement : declaration"""
@@ -118,6 +117,16 @@ def p_expression_leq(p):
 def p_expression_geq(p):
     """expression : factor geq factor"""
     p[0] = ('GEQ', p[1], p[3])
+
+
+def p_expression_less(p):
+    """expression : factor less factor"""
+    p[0] = ('LES', p[1], p[3])
+
+
+def p_expression_gtr(p):
+    """expression : factor greater factor"""
+    p[0] = ('GTR', p[1], p[3])
 
 
 def p_expression_term(p):

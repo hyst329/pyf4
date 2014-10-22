@@ -1,4 +1,5 @@
 import sys
+import pickle
 
 from f4interp import interpret
 import f4parser
@@ -35,6 +36,7 @@ def main():
             interpret(res)
         elif mode == 'ast':
             print res
+            pickle.dump(res, open(sys.argv[1] + ".ast", 'w'), 2)
 
         return 0
     except IOError:

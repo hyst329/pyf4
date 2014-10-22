@@ -29,6 +29,10 @@ def evaluate(expr):
         return evaluate(expr[1]) <= evaluate(expr[2])
     elif op == 'GEQ':
         return evaluate(expr[1]) >= evaluate(expr[2])
+    elif op == 'LES':
+        return evaluate(expr[1]) < evaluate(expr[2])
+    elif op == 'GTR':
+        return evaluate(expr[1]) > evaluate(expr[2])
     elif op == 'IND':
         return varmap[expr[1]][1][evaluate(expr[2]) - 1]
     elif op == 'INT':
@@ -77,3 +81,10 @@ def process(stat):
         else:
             for s in iffalse:
                 process(s)
+    elif instr == 'LOOP':
+        init, cond, oniter, body = stat[1], stat[2], stat[3], stat[4]
+        process(init)
+        while evaluate(cond):
+            for s in body:
+                process(s)
+            process(oniter)
