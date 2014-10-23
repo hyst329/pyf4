@@ -6,6 +6,10 @@
 parsetab.py
 parser.out
 
+# Directories created by py2exe
+build
+dist
+
 ## Directory-based project format
 .idea/
 /*.iml

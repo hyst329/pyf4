@@ -58,6 +58,7 @@ def p_instruction_loop(p):
     """instruction : loop statement comma expression comma statement newline instseq endloop"""
     p[0] = ('LOOP', p[2], p[4], p[6], p[8])
 
+
 def p_statement_decl(p):
     """statement : declaration"""
     p[0] = p[1]
@@ -190,7 +191,7 @@ def p_declaration_array(p):
 
 def p_assignment(p):
     """assignment : ident assign expression"""
-    p[0] = ('MOV', p[1], p[3])
+    p[0] = ('MOV', (p[1],), p[3])
 
 
 def p_assignment_elem(p):

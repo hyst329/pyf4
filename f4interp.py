@@ -70,7 +70,7 @@ def process(stat):
     elif instr == 'MOV':
         ident, expr = stat[1], stat[2]
         if len(ident) == 1:
-            varmap[ident][1] = evaluate(expr)
+            varmap[ident[0]][1] = evaluate(expr)
         else:
             varmap[ident[1]][1][evaluate(ident[2]) - 1] = evaluate(expr)
     elif instr == 'IF':

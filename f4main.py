@@ -40,7 +40,7 @@ def main():
 
         return 0
     except IOError:
-        print "\033[91m File cannot be read"
+        print "File %s cannot be read" % sys.argv[1]
         return 1
 
 
