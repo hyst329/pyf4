@@ -88,3 +88,5 @@ def process(stat):
             for s in body:
                 process(s)
             process(oniter)
+    elif instr == 'FUN':
+        pass

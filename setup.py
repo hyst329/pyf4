@@ -13,5 +13,10 @@ setup(
     }
 )
 
+outfile = "dist/f4main-%d.%d.%d.exe" % \
+          (version["major"], version["minor"], version["patch"])
+if os.path.exists(outfile):
+    os.remove(outfile)
 os.rename("dist/f4main.exe",
-          "dist/f4main-%d.%d.%d.exe" % (version["major"], version["minor"], version["patch"]))
+          outfile)
+os.system("upx -9 %s" % outfile)
