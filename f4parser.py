@@ -59,6 +59,16 @@ def p_instruction_loop(p):
     p[0] = ('LOOP', p[2], p[4], p[6], p[8])
 
 
+def p_instruction_fun(p):
+    """instruction : fun arglist rarrow type newline instseq endfun"""
+    pass
+
+
+def p_instruction_funvoid(p):
+    """instruction : fun arglist newline instseq endfun"""
+    pass
+
+
 def p_statement_decl(p):
     """statement : declaration"""
     p[0] = p[1]
