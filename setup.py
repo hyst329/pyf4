@@ -1,5 +1,7 @@
 from distutils.core import setup
+import os
 import py2exe
+from f4main import version
 
 setup(
     console=["f4main.py"],
@@ -10,3 +12,6 @@ setup(
         }
     }
 )
+
+os.rename("dist/f4main.exe",
+          "dist/f4main-%d.%d.%d.exe" % (version["major"], version["minor"], version["patch"]))
