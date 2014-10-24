@@ -7,10 +7,16 @@ import f4parser
 
 __author__ = 'hyst329'
 
+version = {
+    "major": 0,
+    "minor": 1,
+    "patch": 0
+}
 
 def main():
     if len(sys.argv) == 1:
         print "PyF4 --- F4PL implementation in Python\n"
+        print "Version %d.%d.%d" % (version["major"], version["minor"], version["patch"])
         print "Usage: PyF4 infile.f4 [options]\n"
         return 0
     try:

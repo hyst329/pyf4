@@ -44,7 +44,7 @@ def evaluate(expr):
 
 
 def process(stat):
-    print stat
+    # print stat
     instr = stat[0]
     if instr == 'BLANK':
         return
