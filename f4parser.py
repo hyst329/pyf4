@@ -110,7 +110,7 @@ def p_arglist(p):
         p[0] = [(p[1], p[2])]
     else:
         p[0] = [(p[1], p[2])]
-        p[0] += p[4]
+        p[0].extend(p[4])
 
 def p_type(p):
     """type : int

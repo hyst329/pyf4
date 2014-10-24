@@ -7,6 +7,7 @@ defvals = {
     'REAL': 0.0
 }
 
+functions = {}
 
 def interpret(ast):
     for stat in ast:
@@ -89,4 +90,5 @@ def process(stat):
                 process(s)
             process(oniter)
     elif instr == 'FUN':
-        pass
+        name, args, retn, body = stat[1], stat[2], stat[3], stat[4]
+        functions[name] = (args, body, retn)
