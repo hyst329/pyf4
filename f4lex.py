@@ -43,6 +43,7 @@ keywords = (
     'endfun',
     'loop',
     'endloop',
+    'return',
     # Basic types
     'int',
     'real',

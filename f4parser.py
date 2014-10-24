@@ -60,13 +60,18 @@ def p_instruction_loop(p):
 
 
 def p_instruction_fun(p):
-    """instruction : fun arglist rarrow type newline instseq endfun"""
-    pass
+    """instruction : fun ident colon arglist rarrow type newline instseq endfun"""
+    p[0] = ('FUN', p[2], p[4], p[6], p[8])
 
 
 def p_instruction_funvoid(p):
-    """instruction : fun arglist newline instseq endfun"""
-    pass
+    """instruction : fun ident colon arglist newline instseq endfun"""
+    p[0] = ('FUN', p[2], p[4], None, p[6])
+
+
+def p_instruction_return(p):
+    """instruction : return expression"""
+    p[0] = ('RET', p[2])
 
 
 def p_statement_decl(p):
