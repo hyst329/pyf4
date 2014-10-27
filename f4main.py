@@ -13,11 +13,12 @@ version = {
     "patch": 0
 }
 
+
 def main():
     if len(sys.argv) == 1:
-        print "PyF4 --- F4PL implementation in Python\n"
-        print "Version %d.%d.%d" % (version["major"], version["minor"], version["patch"])
-        print "Usage: PyF4 infile.f4 [options]\n"
+        print("PyF4 --- F4PL implementation in Python\n")
+        print("Version %d.%d.%d" % (version["major"], version["minor"], version["patch"]))
+        print("Usage: PyF4 infile.f4 [options]\n")
         return 0
     try:
         cont = open(sys.argv[1], 'r').read()
@@ -32,21 +33,21 @@ def main():
         elif sys.argv[2] == '-c':
             mode = 'ast'
         else:
-            print "Unknown format specified"
+            print("Unknown format specified")
             return
         res = parser.parse(cont)
         # if parser.error:
         # print "Error"
         if mode == 'int':
-            print 'Interpreting...'
+            print('Interpreting...')
             interpret(res)
         elif mode == 'ast':
-            print res
+            print(res)
             pickle.dump(res, open(sys.argv[1] + ".ast", 'w'), 2)
 
         return 0
     except IOError:
-        print "File %s cannot be read" % sys.argv[1]
+        print("File %s cannot be read" % sys.argv[1])
         return 1
 
 

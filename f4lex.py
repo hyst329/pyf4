@@ -109,7 +109,8 @@ def t_intlit(t):
 
 
 def t_error(t):
-    print "Invalid token ", t.value[0]
+    print
+    "Invalid token ", t.value[0]
     t.lexer.skip(1)
 
 

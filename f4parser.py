@@ -103,6 +103,7 @@ def p_statement_debugvar(p):
     """statement : debugvar """
     p[0] = ('DEBUGVAR',)
 
+
 def p_arglist(p):
     """arglist : type ident comma arglist
                | type ident"""
@@ -111,6 +112,7 @@ def p_arglist(p):
     else:
         p[0] = [(p[1], p[2])]
         p[0].extend(p[4])
+
 
 def p_type(p):
     """type : int
@@ -226,7 +228,8 @@ def p_assignment_elem(p):
 
 def p_error(p):
     if not p:
-        print "Syntax error, translation terminated"
+        print
+        "Syntax error, translation terminated"
 
 
 parser = yacc.yacc(debug=True, debuglog=log)
