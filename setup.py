@@ -1,6 +1,6 @@
 from distutils.core import setup
 from Cython.Build import cythonize
-from f4main import version
+from f4ver import version
 
 setup(
     name="PyF4",
