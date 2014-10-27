@@ -11,6 +11,7 @@ build_ext.log
 *.c
 *.pyd
 build
+__pycache__
 
 ## Directory-based project format
 .idea/
