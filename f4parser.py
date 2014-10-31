@@ -114,6 +114,16 @@ def p_arglist(p):
         p[0].extend(p[4])
 
 
+def p_exprlist(p):
+    """exprlist : expression comma exprlist
+                | expression"""
+    if len(p) == 2:
+        p[0] = ['ELIST', p[1]]
+    else:
+        p[0] = ['ELIST', p[1]]
+        p[0].extend(p[3])
+
+
 def p_type(p):
     """type : int
             | real"""
@@ -198,6 +208,11 @@ def p_factor_expr(p):
 def p_factor_arrelem(p):
     """factor : ident point factor"""
     p[0] = ('IND', p[1], p[3])
+
+
+def p_factor_fun(p):
+    """factor : ident lparen exprlist rparen"""
+    p[0] = ('CALL', p[1], p[3])
 
 
 def p_declaration_ident(p):
