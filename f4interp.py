@@ -46,15 +46,13 @@ def evaluate(expr):
 
 
 def process(stat):
-    print
-    stat
+    print(stat)
     instr = stat[0]
     if instr == 'BLANK':
         return
     elif instr == 'DEBUGVAR':
         for k in varmap.keys():
-            print
-            "%s  \t%s = %s" % (varmap[k][0], k, varmap[k][1])
+            print("%s  \t%s = %s" % (varmap[k][0], k, varmap[k][1]))
     elif instr == 'NEW':
         typename, ident, value = stat[1], stat[2], stat[3]
         varmap[ident] = [typename, evaluate(value)]
@@ -70,8 +68,7 @@ def process(stat):
                 'Enter value for %s.%s:' % (ident[1], evaluate(ident[2])))
     elif instr == 'OUT':
         expr = stat[1]
-        print
-        evaluate(expr)
+        print(evaluate(expr))
     elif instr == 'MOV':
         ident, expr = stat[1], stat[2]
         if len(ident) == 1:

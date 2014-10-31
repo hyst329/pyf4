@@ -37,7 +37,7 @@ def main():
             interpret(res)
         elif mode == 'ast':
             print(res)
-            pickle.dump(res, open(sys.argv[1] + ".ast", 'w'), 2)
+            # pickle.dump(res, open(sys.argv[1] + ".ast", 'w'), 2)
 
         return 0
     except IOError:
