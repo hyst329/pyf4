@@ -8,6 +8,8 @@ defvals = {
 }
 
 functions = {}
+current_function = None
+return_value = None
 
 
 def interpret(ast):
@@ -15,7 +17,28 @@ def interpret(ast):
         process(stat)
 
 
+def call_function(name, args):
+    global current_function, return_value
+    # return_value = None
+    i = 0
+    print(args)
+    while i < len(args):
+        args[i] = evaluate(args[i])
+        i += 1
+    f = functions[name]
+    i = 0
+    for a in f[0]:
+        f[3][a[1]] = (a[0], args[i])
+        i += 1
+    current_function = name
+    for s in f[1]:
+        process(s)
+    current_function = None
+    return return_value
+
+
 def evaluate(expr):
+    global return_value
     op = expr[0]
     if op == 'ADD':
         return evaluate(expr[1]) + evaluate(expr[2])
@@ -42,10 +65,18 @@ def evaluate(expr):
     elif op == 'REAL':
         return float(expr[1])
     elif op == 'ID':
-        return varmap[expr[1]][1]
+        if current_function and expr[1] in functions[current_function][3]:
+            return functions[current_function][3][expr[1]][1]
+        else:
+            return varmap[expr[1]][1]
+    elif op == 'CALL':
+        r = call_function(expr[1], expr[2])
+        print(r)
+        return r
 
 
 def process(stat):
+    global return_value, current_function
     print(stat)
     instr = stat[0]
     if instr == 'BLANK':
@@ -55,10 +86,16 @@ def process(stat):
             print("%s  \t%s = %s" % (varmap[k][0], k, varmap[k][1]))
     elif instr == 'NEW':
         typename, ident, value = stat[1], stat[2], stat[3]
-        varmap[ident] = [typename, evaluate(value)]
+        if current_function:
+            functions[current_function][3][ident] = [typename, evaluate(value)]
+        else:
+            varmap[ident] = [typename, evaluate(value)]
     elif instr == 'NEWARR':
         typename, ident, size = stat[1], stat[3], evaluate(stat[2])
-        varmap[ident] = [typename + '.' + str(size), [defvals[typename]] * int(size)]
+        if current_function:
+            functions[current_function][3][ident] = [typename + '.' + str(size), [defvals[typename]] * int(size)]
+        else:
+            varmap[ident] = [typename + '.' + str(size), [defvals[typename]] * int(size)]
     elif instr == 'IN':
         ident = stat[1]
         if len(ident) == 2:
@@ -92,4 +129,7 @@ def process(stat):
             process(oniter)
     elif instr == 'FUN':
         name, args, retn, body = stat[1], stat[2], stat[3], stat[4]
-        functions[name] = (args, body, retn)
+        functions[name] = (args, body, retn, {})
+    elif instr == 'RET':
+        return_value = evaluate(stat[1])
+        print("Returned %s" % return_value)

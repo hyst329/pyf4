@@ -118,9 +118,9 @@ def p_exprlist(p):
     """exprlist : expression comma exprlist
                 | expression"""
     if len(p) == 2:
-        p[0] = ['ELIST', p[1]]
+        p[0] = [p[1]]
     else:
-        p[0] = ['ELIST', p[1]]
+        p[0] = [p[1]]
         p[0].extend(p[3])
 
 
@@ -243,8 +243,7 @@ def p_assignment_elem(p):
 
 def p_error(p):
     if not p:
-        print
-        "Syntax error, translation terminated"
+        print("Syntax error, translation terminated")
 
 
 parser = yacc.yacc(debug=True, debuglog=log)
