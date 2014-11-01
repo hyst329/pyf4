@@ -12,6 +12,7 @@ build_ext.log
 *.c
 *.pyd
 build
+f4main.build
 __pycache__
 
 ## Directory-based project format
