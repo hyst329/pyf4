@@ -84,33 +84,32 @@ t_point = r'\.'
 
 
 def t_ident(t):
-    r'[a-zA-Z][a-zA-Z0-9]*'
+    r"""[a-zA-Z][a-zA-Z0-9]*"""
     if t.value in keywords:
         t.type = t.value
     return t
 
 
 def t_newline(t):
-    r'\n'
+    r"""\n"""
     t.lexer.lineno += 1
     return t
 
 
 def t_reallit(t):
-    r'\d+[\.\,]\d+'
+    r"""\d+[\.\,]\d+"""
     t.value = float(t.value)
     return t
 
 
 def t_intlit(t):
-    r'\d+'
+    r"""\d+"""
     t.value = int(t.value)
     return t
 
 
 def t_error(t):
-    print
-    "Invalid token ", t.value[0]
+    print("Invalid token ", t.value[0])
     t.lexer.skip(1)
 
 
