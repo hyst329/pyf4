@@ -1,3 +1,4 @@
+import copy
 from f4error import error
 
 __author__ = 'hyst329'
@@ -23,14 +24,15 @@ def call_function(name, args):
     global current_function, return_value
     # return_value = None
     i = 0
-    print(args)
+    # print(args)
+    argsc = copy.deepcopy(args)
     while i < len(args):
-        args[i] = evaluate(args[i])
+        argsc[i] = evaluate(args[i])
         i += 1
     f = functions[name]
     i = 0
     for a in f[0]:
-        f[3][a[1]] = (a[0], args[i])
+        f[3][a[1]] = (a[0], argsc[i])
         i += 1
     current_function = name
     for s in f[1]:
@@ -76,13 +78,13 @@ def evaluate(expr):
             error('NOVAR')
     elif op == 'CALL':
         r = call_function(expr[1], expr[2])
-        print(r)
+        # print(r)
         return r
 
 
 def process(stat):
     global return_value, current_function
-    print(stat)
+    # print(stat)
     instr = stat[0]
     if instr == 'BLANK':
         return
@@ -114,9 +116,15 @@ def process(stat):
     elif instr == 'MOV':
         ident, expr = stat[1], stat[2]
         if len(ident) == 1:
-            varmap[ident[0]][1] = evaluate(expr)
+            if current_function:
+                functions[current_function][3][ident[0]][1] = evaluate(expr)
+            else:
+                varmap[ident[0]][1] = evaluate(expr)
         else:
-            varmap[ident[1]][1][evaluate(ident[2]) - 1] = evaluate(expr)
+            if current_function:
+                functions[current_function][3][ident[1]][1][evaluate(ident[2]) - 1] = evaluate(expr)
+            else:
+                varmap[ident[1]][1][evaluate(ident[2]) - 1] = evaluate(expr)
     elif instr == 'IF':
         cond, iftrue, iffalse = stat[1], stat[2], stat[3]
         if evaluate(cond):
@@ -137,4 +145,4 @@ def process(stat):
         functions[name] = (args, body, retn, {})
     elif instr == 'RET':
         return_value = evaluate(stat[1])
-        print("Returned %s" % return_value)
+        # print("Returned %s" % return_value)
