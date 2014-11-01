@@ -1,4 +1,5 @@
 from ply import yacc
+from f4error import error
 
 import f4lex
 from f4log import log
@@ -48,6 +49,13 @@ def p_instruction_if(p):
     """instruction : if expression newline instseq endif"""
     p[0] = ('IF', p[2], p[4], ('BLANK',))
 
+def p_instruction_if_bad0(p):
+    """instruction : if error newline instseq endif"""
+    error('IFERR')
+
+def p_instruction_if_bad1(p):
+    """instruction : if expression newline instseq error"""
+    error('NOENDIF')
 
 def p_instruction_ifelse(p):
     """instruction : if expression newline instseq else newline instseq endif"""

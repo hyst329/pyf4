@@ -43,6 +43,8 @@ def main():
     except IOError:
         print("File %s cannot be read" % sys.argv[1])
         return 1
+    except RuntimeError:
+        print('Fatal errors, translation terminated')
 
 
 if __name__ == "__main__":

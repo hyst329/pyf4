@@ -1,3 +1,5 @@
+from f4error import error
+
 __author__ = 'hyst329'
 
 varmap = {}
@@ -65,10 +67,13 @@ def evaluate(expr):
     elif op == 'REAL':
         return float(expr[1])
     elif op == 'ID':
-        if current_function and expr[1] in functions[current_function][3]:
-            return functions[current_function][3][expr[1]][1]
-        else:
-            return varmap[expr[1]][1]
+        try:
+            if current_function and expr[1] in functions[current_function][3]:
+                return functions[current_function][3][expr[1]][1]
+            else:
+                return varmap[expr[1]][1]
+        except KeyError:
+            error('NOVAR')
     elif op == 'CALL':
         r = call_function(expr[1], expr[2])
         print(r)
