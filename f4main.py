@@ -1,5 +1,6 @@
 import sys
 import pickle
+from f4error import error
 
 from f4interp import interpret
 import f4parser
@@ -41,7 +42,7 @@ def main():
 
         return 0
     except IOError:
-        print("File %s cannot be read" % sys.argv[1])
+        error('NOFILE', sys.argv[1])
         return 1
     except RuntimeError:
         print('Fatal errors, translation terminated')

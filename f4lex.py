@@ -1,3 +1,5 @@
+from f4error import error
+
 __author__ = 'hyst329'
 
 from ply import *
@@ -109,7 +111,7 @@ def t_intlit(t):
 
 
 def t_error(t):
-    print("Invalid token ", t.value[0])
+    error('INVTOK', t.value[0])
     t.lexer.skip(1)
 
 
