@@ -4,7 +4,7 @@ from f4error import error
 import f4lex
 from f4log import log
 
-
+# Parsing file for F4 programming language
 __author__ = 'hyst329'
 
 tokens = f4lex.tokens
@@ -16,11 +16,13 @@ precedence = (
 )
 
 
+# Main program
 def p_program(p):
     """program : instseq"""
     p[0] = p[1]
 
 
+# Instruction sequence
 def p_instseq(p):
     """instseq : instseq instruction
                | instruction"""
@@ -36,6 +38,7 @@ def p_instseq(p):
             p[0].append(p[2])
 
 
+# Instruction
 def p_instruction(p):
     """instruction : newline
                    | statement newline"""
@@ -49,13 +52,16 @@ def p_instruction_if(p):
     """instruction : if expression newline instseq endif"""
     p[0] = ('IF', p[2], p[4], ('BLANK',))
 
+
 def p_instruction_if_bad0(p):
     """instruction : if error newline instseq endif"""
     error('IFERR')
 
+
 def p_instruction_if_bad1(p):
     """instruction : if expression newline instseq error"""
     error('NOENDIF')
+
 
 def p_instruction_ifelse(p):
     """instruction : if expression newline instseq else newline instseq endif"""
@@ -82,6 +88,7 @@ def p_instruction_return(p):
     p[0] = ('RET', p[2])
 
 
+# Statement
 def p_statement_decl(p):
     """statement : declaration"""
     p[0] = p[1]
@@ -112,6 +119,7 @@ def p_statement_debugvar(p):
     p[0] = ('DEBUGVAR',)
 
 
+# Argument list
 def p_arglist(p):
     """arglist : type ident comma arglist
                | type ident"""
@@ -122,6 +130,7 @@ def p_arglist(p):
         p[0].extend(p[4])
 
 
+# Expression list
 def p_exprlist(p):
     """exprlist : expression comma exprlist
                 | expression"""
@@ -132,12 +141,14 @@ def p_exprlist(p):
         p[0].extend(p[3])
 
 
+# Type
 def p_type(p):
     """type : int
             | real"""
     p[0] = p[1].upper()
 
 
+# Expression
 def p_expression_plus(p):
     """expression : expression plus term"""
     p[0] = ('ADD', p[1], p[3])
@@ -178,6 +189,7 @@ def p_expression_term(p):
     p[0] = p[1]
 
 
+# Term
 def p_term_times(p):
     """term : term mult factor"""
     p[0] = ('MUL', p[1], p[3])
@@ -193,6 +205,7 @@ def p_term_factor(p):
     p[0] = p[1]
 
 
+# Factor
 def p_factor_int(p):
     """factor : intlit"""
     p[0] = ('INT', p[1])
@@ -223,6 +236,7 @@ def p_factor_fun(p):
     p[0] = ('CALL', p[1], p[3])
 
 
+# Declaration
 def p_declaration_ident(p):
     """declaration : type ident
                    | type ident assign expression"""
@@ -237,6 +251,7 @@ def p_declaration_array(p):
     p[0] = ('NEWARR', p[1], p[3], p[4])
 
 
+# Assignment
 def p_assignment(p):
     """assignment : ident assign expression"""
     p[0] = ('MOV', (p[1],), p[3])
