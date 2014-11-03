@@ -75,7 +75,7 @@ def evaluate(expr):
             else:
                 return varmap[expr[1]][1]
         except KeyError:
-            error('NOVAR')
+            error('NOVAR', expr[1])
     elif op == 'CALL':
         r = call_function(expr[1], expr[2])
         # print(r)

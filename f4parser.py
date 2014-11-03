@@ -48,6 +48,7 @@ def p_instruction(p):
         p[0] = ('BLANK',)
 
 
+# IF statement forms
 def p_instruction_if(p):
     """instruction : if expression newline instseq endif"""
     p[0] = ('IF', p[2], p[4], ('BLANK',))
@@ -68,11 +69,13 @@ def p_instruction_ifelse(p):
     p[0] = ('IF', p[2], p[4], p[7])
 
 
+# LOOP statement form
 def p_instruction_loop(p):
     """instruction : loop statement comma expression comma statement newline instseq endloop"""
     p[0] = ('LOOP', p[2], p[4], p[6], p[8])
 
 
+# Functions
 def p_instruction_fun(p):
     """instruction : fun ident colon arglist rarrow type newline instseq endfun"""
     p[0] = ('FUN', p[2], p[4], p[6], p[8])

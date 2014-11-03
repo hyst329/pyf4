@@ -9,7 +9,7 @@ errors = {
     # Placeholder for code 6
     # Placeholder for code 7
     # Placeholder for code 8
-    'NOVAR': (9, 'No such variable')
+    'NOVAR': (9, 'No such variable "%s"')
 }
 
 

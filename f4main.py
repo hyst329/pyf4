@@ -4,6 +4,7 @@ from f4error import error
 
 from f4interp import interpret
 import f4parser
+from f4ppc import preprocess, to_string
 from f4ver import version
 
 __author__ = 'hyst329'
@@ -19,9 +20,7 @@ def main():
         cont = open(sys.argv[1], 'r').read()
         if cont[-1] != '\n':
             cont += '\n'
-        # f4lex.lexer.input(cont)
-        # for tok in f4lex.lexer:
-        # print tok
+        cont = to_string(preprocess(cont))
         parser = f4parser.parser
         if len(sys.argv) == 2 or sys.argv[2] == '-i':
             mode = 'int'
