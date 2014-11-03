@@ -4,7 +4,7 @@ fun abs : real x -> real
     if x > 0
         return x
     else
-        return 0 - x
+        return -x
     endif
 endfun
 
@@ -23,7 +23,7 @@ fun sin : real x -> real
     real r = 0.0
     loop int i = 1, i <= 30, i = i + 2
         r = r + a
-        a = ((0-1) * a * x * x) / ((i + 1) * (i + 2))
+        a = (-a * x * x) / ((i + 1) * (i + 2))
     endloop
     return r
 endfun

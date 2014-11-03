@@ -13,6 +13,7 @@ precedence = (
     ('nonassoc', 'equals', 'leq', 'geq', 'less', 'greater'),
     ('left', 'plus', 'minus'),
     ('left', 'mult', 'divide'),
+    ('right', 'uminus')
 )
 
 
@@ -207,6 +208,10 @@ def p_term_factor(p):
     """term : factor"""
     p[0] = p[1]
 
+
+def p_term_uminus(p):
+    """term : minus factor %prec uminus"""
+    p[0] = ('NEG', p[2])
 
 # Factor
 def p_factor_int(p):

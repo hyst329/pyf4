@@ -64,6 +64,8 @@ def evaluate(expr):
         return evaluate(expr[1]) > evaluate(expr[2])
     elif op == 'IND':
         return varmap[expr[1]][1][evaluate(expr[2]) - 1]
+    elif op == 'NEG':
+        return -evaluate(expr[1])
     elif op == 'INT':
         return int(expr[1])
     elif op == 'REAL':
