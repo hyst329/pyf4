@@ -1,13 +1,14 @@
 __author__ = 'hyst329'
+from termcolor import cprint
 
 errors = {
-    'NOFILE': (1, 'File %s cannot be opened'),
+    'NOFILE': (1, 'File "%s" cannot be opened : %s (ERRNO code %s)'),
     'INVTOK': (2, 'Invalid token %s'),
     'NOENDIF': (3, 'No endif specified'),
     'IFERR': (4, 'Error in IF conditional expression'),
     'ELSEERR': (5, 'Error in ELSE part of the conditional expression'),
-    # Placeholder for code 6
-    # Placeholder for code 7
+    'INVDIR': (6, 'Invalid preprocessor directive: %s'),
+    'INVSIZE': (7, 'Invalid size of the array %s : %s (must be > 0)'),
     'MPELSE': (8, 'Misplaced ELSE'),
     'NOVAR': (9, 'No such variable "%s"'),
     'INVIND': (10, "Invalid index: must be an integer expression"),
@@ -22,7 +23,8 @@ errors = {
 }
 
 
-def error(code, *args):
+def error(code, *args, **kwargs):
     e = errors.get(code, (0, 'Unknown error'))
-    print('Error: %s (code: %03d)' % (e[1] % args, e[0]))
-    raise RuntimeError()
+    cprint('Error: %s (code: %03d)' % (e[1] % args, e[0]), 'red')
+    if kwargs.get('exc', 1):
+        raise RuntimeError()

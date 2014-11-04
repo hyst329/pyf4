@@ -1,5 +1,6 @@
 import sys
 import pickle
+from termcolor import cprint
 from f4error import error
 
 from f4interp import interpret
@@ -40,11 +41,11 @@ def main():
             # pickle.dump(res, open(sys.argv[1] + ".ast", 'w'), 2)
 
         return 0
-    except IOError:
-        error('NOFILE', sys.argv[1])
-        return 1
+    except IOError as e:
+        error('NOFILE', e.filename, e.strerror, e.errno, exc=0)
     except RuntimeError:
-        print('Fatal errors, translation terminated')
+        cprint('Fatal errors, translation terminated', 'grey', 'on_red')
+        return 1
 
 
 if __name__ == "__main__":

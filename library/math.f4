@@ -21,7 +21,17 @@ endfun
 fun sin : real x -> real
     real a = x
     real r = 0.0
-    loop int i = 1, i <= 30, i = i + 2
+    loop int i = 1, abs(a) > 0 , i = i + 2
+        r = r + a
+        a = (-a * x * x) / ((i + 1) * (i + 2))
+    endloop
+    return r
+endfun
+
+fun cos : real x -> real
+    real a = 1
+    real r = 0.0
+    loop int i = 0, abs(a) > 0 , i = i + 2
         r = r + a
         a = (-a * x * x) / ((i + 1) * (i + 2))
     endloop

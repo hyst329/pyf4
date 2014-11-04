@@ -12,6 +12,7 @@ parser.out
 *.pyd
 build
 f4main.build
+dist
 __pycache__
 
 ## Directory-based project format
