@@ -70,6 +70,21 @@ def p_instruction_ifelse(p):
     p[0] = ('IF', p[2], p[4], p[7])
 
 
+def p_instruction_ifelse_bad0(p):
+    """instruction : if expression newline instseq else newline instseq error"""
+    error('NOENDIF')
+
+
+def p_instruction_ifelse_bad1(p):
+    """instruction : if expression newline instseq else error"""
+    error('ELSEERR')
+
+
+def p_instruction_ifelse_bad2(p):
+    """instruction : else"""
+    error('MPELSE')
+
+
 # LOOP statement form
 def p_instruction_loop(p):
     """instruction : loop statement comma expression comma statement newline instseq endloop"""
@@ -87,9 +102,15 @@ def p_instruction_funvoid(p):
     p[0] = ('FUN', p[2], p[4], None, p[6])
 
 
+# Functions --- return
 def p_instruction_return(p):
     """instruction : return expression"""
     p[0] = ('RET', p[2])
+
+
+def p_instruction_return_bad(p):
+    """instruction : return error"""
+    error('RETERR')
 
 
 # Statement
@@ -103,14 +124,29 @@ def p_statement_in(p):
     p[0] = ('IN', ('ID', p[2]))
 
 
+def p_statement_in_bad(p):
+    """statement : in error"""
+    error('INERR')
+
+
 def p_statement_inelem(p):
     """statement : in ident point factor"""
     p[0] = ('IN', ('ELEM', p[2], p[4]))
 
 
+def p_statement_inelem_bad(p):
+    """statement : in ident point error"""
+    error('INVIND')
+
+
 def p_statement_out(p):
     """statement : out expression"""
     p[0] = ('OUT', p[2])
+
+
+def p_statement_out_bad(p):
+    """statement : out error"""
+    error('OUTERR')
 
 
 def p_statement_ass(p):
@@ -134,6 +170,16 @@ def p_arglist(p):
         p[0].extend(p[4])
 
 
+def p_arglist_bad0(p):
+    """arglist : type error"""
+    error('INVID')
+
+
+def p_arglist_bad1(p):
+    """arglist : type ident comma error"""
+    error('INVALI')
+
+
 # Expression list
 def p_exprlist(p):
     """exprlist : expression comma exprlist
@@ -143,6 +189,16 @@ def p_exprlist(p):
     else:
         p[0] = [p[1]]
         p[0].extend(p[3])
+
+
+def p_exprlist_bad0(p):
+    """exprlist : error"""
+    error('INVELI')
+
+
+def p_exprlist_bad1(p):
+    """exprlist : expression comma error"""
+    error('INVELI')
 
 
 # Type
@@ -213,6 +269,7 @@ def p_term_uminus(p):
     """term : minus factor %prec uminus"""
     p[0] = ('NEG', p[2])
 
+
 # Factor
 def p_factor_int(p):
     """factor : intlit"""
@@ -254,9 +311,29 @@ def p_declaration_ident(p):
         p[0] = ('NEW', p[1], p[2], p[4])
 
 
+def p_declaration_ident_bad0(p):
+    """declaration : type error"""
+    error('INVID')
+
+
+def p_declaration_ident_bad1(p):
+    """declaration : type ident assign error"""
+    error('DECLERR')
+
+
 def p_declaration_array(p):
     """declaration : type point factor ident"""
     p[0] = ('NEWARR', p[1], p[3], p[4])
+
+
+def p_declaration_array_bad0(p):
+    """declaration : type point error ident"""
+    error('INVIND')
+
+
+def p_declaration_array_bad1(p):
+    """declaration : type point factor error"""
+    error('INVID')
 
 
 # Assignment
@@ -264,6 +341,15 @@ def p_assignment(p):
     """assignment : ident assign expression"""
     p[0] = ('MOV', (p[1],), p[3])
 
+
+def p_assignment_bad0(p):
+    """assignment : error assign expression"""
+    error('INVID')
+
+
+def p_assignment_bad1(p):
+    """assignment : ident assign error"""
+    error('ASERR')
 
 def p_assignment_elem(p):
     """assignment : ident point factor assign expression"""
@@ -274,7 +360,7 @@ def p_assignment_elem(p):
 
 def p_error(p):
     if not p:
-        print("Syntax error, translation terminated")
+        error()
 
 
 parser = yacc.yacc(debug=True, debuglog=log)

@@ -5,11 +5,20 @@ errors = {
     'INVTOK': (2, 'Invalid token %s'),
     'NOENDIF': (3, 'No endif specified'),
     'IFERR': (4, 'Error in IF conditional expression'),
-    # Placeholder for code 5
+    'ELSEERR': (5, 'Error in ELSE part of the conditional expression'),
     # Placeholder for code 6
     # Placeholder for code 7
-    # Placeholder for code 8
-    'NOVAR': (9, 'No such variable "%s"')
+    'MPELSE': (8, 'Misplaced ELSE'),
+    'NOVAR': (9, 'No such variable "%s"'),
+    'INVIND': (10, "Invalid index: must be an integer expression"),
+    'RETERR': (11, 'Return error: must be expression'),
+    'ASERR': (12, 'Assignment error: assigned value must be an expression'),
+    'DECLERR': (13, 'Declaration error: assigned value must be an expression'),
+    'INVELI': (14, 'Error in expression list'),
+    'INVALI': (15, 'Error in argument list'),
+    'INVID': (16, 'Invalid identifier'),
+    'INERR': (17, 'Input error: must be identifier'),
+    'OUTERR': (18, 'Output error: must be expression'),
 }
 
 
