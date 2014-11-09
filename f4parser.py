@@ -161,8 +161,8 @@ def p_statement_debugvar(p):
 
 # Argument list
 def p_arglist(p):
-    """arglist : type ident comma arglist
-               | type ident"""
+    """arglist : etype ident comma arglist
+               | etype ident"""
     if len(p) == 3:
         p[0] = [(p[1], p[2])]
     else:
@@ -171,13 +171,18 @@ def p_arglist(p):
 
 
 def p_arglist_bad0(p):
-    """arglist : type error"""
+    """arglist : etype error"""
     error('INVID')
 
 
 def p_arglist_bad1(p):
-    """arglist : type ident comma error"""
+    """arglist : etype ident comma error"""
     error('INVALI')
+
+
+def p_etype(p):
+    """etype : type | type point intlit"""
+    p[0] = (p[1] + ('.' + p[3] if len(p) == 4 else ''))
 
 
 # Expression list
@@ -350,6 +355,7 @@ def p_assignment_bad0(p):
 def p_assignment_bad1(p):
     """assignment : ident assign error"""
     error('ASERR')
+
 
 def p_assignment_elem(p):
     """assignment : ident point factor assign expression"""
