@@ -16,4 +16,4 @@ setup(name="pyf4",
           }
       },
       executables=[Executable("f4main.py")],
-      requires=['cx_Freeze', 'ply'])
+      requires=['cx_Freeze', 'ply', 'termcolor'])
