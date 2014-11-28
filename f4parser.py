@@ -181,8 +181,9 @@ def p_arglist_bad1(p):
 
 
 def p_etype(p):
-    """etype : type | type point intlit"""
-    p[0] = (p[1] + ('.' + p[3] if len(p) == 4 else ''))
+    """etype : type
+             | type point intlit"""
+    p[0] = (p[1] + ('.' + str(p[3]) if len(p) == 4 else ''))
 
 
 # Expression list
