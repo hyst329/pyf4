@@ -6,7 +6,7 @@ from f4error import error
 from f4interp import interpret
 import f4parser
 from f4ppc import preprocess, to_string
-from f4ver import version
+from f4ver import verstr
 
 __author__ = 'hyst329'
 
@@ -14,7 +14,7 @@ __author__ = 'hyst329'
 def main():
     if len(sys.argv) == 1:
         print("PyF4 --- F4PL implementation in Python\n")
-        print("Version %d.%d.%d" % (version["major"], version["minor"], version["patch"]))
+        print("Version %s" % verstr)
         print("Usage: PyF4 infile.f4 [options]\n")
         return 0
     try:

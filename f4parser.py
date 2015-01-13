@@ -210,7 +210,9 @@ def p_exprlist_bad1(p):
 # Type
 def p_type(p):
     """type : int
-            | real"""
+            | real
+            | char
+            | string"""
     p[0] = p[1].upper()
 
 
@@ -285,6 +287,16 @@ def p_factor_int(p):
 def p_factor_real(p):
     """factor : reallit"""
     p[0] = ('REAL', p[1])
+
+
+def p_factor_char(p):
+    """factor : chrlit"""
+    p[0] = ('CHAR', p[1])
+
+
+def p_factor_str(p):
+    """factor : strlit"""
+    p[0] = ('STR', p[1])
 
 
 def p_factor_ident(p):

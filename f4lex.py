@@ -10,6 +10,8 @@ tokens = [
     # Some literals
     'intlit',
     'reallit',
+    'chrlit',
+    'strlit',
     'ident',
     # 2 char operators
     'equals',
@@ -110,6 +112,13 @@ def t_intlit(t):
     t.value = int(t.value)
     return t
 
+def t_chrlit(t):
+    r"""'[^('\)]'"""
+    return t
+
+def t_strlit(t):
+    r""""[^('\)]+\""""
+    return t
 
 def t_error(t):
     error('INVTOK', t.value[0])
