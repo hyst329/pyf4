@@ -7,7 +7,9 @@ varmap = {}
 
 defvals = {
     'INT': 0,
-    'REAL': 0.0
+    'REAL': 0.0,
+    'CHAR': '\0',
+    'STR': ""
 }
 
 functions = {}
@@ -66,10 +68,8 @@ def evaluate(expr):
         return varmap[expr[1]][1][evaluate(expr[2]) - 1]
     elif op == 'NEG':
         return -evaluate(expr[1])
-    elif op == 'INT':
-        return int(expr[1])
-    elif op == 'REAL':
-        return float(expr[1])
+    elif op in ('INT', 'REAL', 'CHAR', 'STR'):
+        return to_type(op, expr[1])
     elif op == 'ID':
         try:
             if current_functions and expr[1] in functions[current_functions[-1]][3]:
@@ -114,6 +114,7 @@ def process(stat):
         else:
             varmap[ident[1]][1][evaluate(ident[2]) - 1] = input(
                 'Enter value for %s.%s:' % (ident[1], evaluate(ident[2])))
+        varmap[ident[1]][1] = to_type(*varmap[ident[1]])
     elif instr == 'OUT':
         expr = stat[1]
         print(evaluate(expr))
@@ -150,3 +151,14 @@ def process(stat):
     elif instr == 'RET':
         return_value = evaluate(stat[1])
         # print("Returned %s" % return_value)
+
+
+def to_type(t, v):
+    if t == 'INT':
+        return int(v)
+    elif t == 'REAL':
+        return float(v)
+    elif t == 'CHAR':
+        return str(v)[0]
+    elif t == 'STR':
+        return str(v)

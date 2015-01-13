@@ -4,7 +4,7 @@ version = {
     "major": 0,
     "minor": 3,
     "patch": 0,
-    "type": "pre-alpha"
+    "type": "prealpha"
 }
 
-verstr = "%s.%s.%s%s" % (version["major"], version["minor"], version["patch"], version["type"])
+verstr = "%s.%s.%s-%s" % (version["major"], version["minor"], version["patch"], version["type"])
