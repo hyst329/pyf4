@@ -20,6 +20,7 @@ errors = {
     'INVID': (16, 'Invalid identifier'),
     'INERR': (17, 'Input error: must be identifier'),
     'OUTERR': (18, 'Output error: must be expression'),
+    'NOTARR': (19, 'Argument "%s" is not an array')
 }
 
 

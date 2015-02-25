@@ -3,8 +3,8 @@ __author__ = 'hyst329'
 version = {
     "major": 0,
     "minor": 3,
-    "patch": 0,
-    "type": "prealpha"
+    "patch": 1,
+    "type": "alpha"
 }
 
 verstr = "%s.%s.%s-%s" % (version["major"], version["minor"], version["patch"], version["type"])

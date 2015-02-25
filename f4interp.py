@@ -151,6 +151,18 @@ def process(stat):
     elif instr == 'RET':
         return_value = evaluate(stat[1])
         # print("Returned %s" % return_value)
+    elif instr == 'RESIZE':
+        name, newsize = stat[1], evaluate(stat[2])
+        arr = varmap[name[1]][1]
+        if not isinstance(arr, list):
+            error('NOTARR', name[1])
+        oldsize = len(arr)
+        if oldsize > newsize:
+            for i in range(oldsize - newsize):
+                arr.pop()
+        elif oldsize < newsize:
+            for i in range(newsize - oldsize):
+                arr.append(defvals[varmap[name[1]][0].split('.')[0]])
 
 
 def to_type(t, v):

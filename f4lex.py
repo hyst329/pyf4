@@ -49,6 +49,7 @@ keywords = (
     'endloop',
     'return',
     'use',
+    'resize',
     # Basic types
     'int',
     'real',
