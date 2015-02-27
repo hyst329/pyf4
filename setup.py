@@ -1,9 +1,9 @@
 import sys
 from cx_Freeze import setup, Executable
-from f4ver import verstr
+from f4ver import verstrs
 
 setup(name="pyf4",
-      version=verstr,
+      version=verstrs,
       description="Python implementation of the F4 programming language",
       options={
           "build_exe": {

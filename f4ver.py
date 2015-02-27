@@ -8,3 +8,4 @@ version = {
 }
 
 verstr = "%s.%s.%s-%s" % (version["major"], version["minor"], version["patch"], version["type"])
+verstrs = "%s.%s.%s" % (version["major"], version["minor"], version["patch"])

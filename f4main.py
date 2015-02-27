@@ -27,8 +27,10 @@ def main():
             mode = 'int'
         elif sys.argv[2] == '-c':
             mode = 'ast'
+        elif sys.argv[2] == '-b':
+            mode = 'bytecode'
         else:
-            print("Unknown format specified")
+            print("Unknown format specified: '%s'" % sys.argv[2])
             return
         res = parser.parse(cont)
         # if parser.error:
@@ -37,9 +39,10 @@ def main():
             print('Interpreting...')
             interpret(res)
         elif mode == 'ast':
-            print(res)
-            # pickle.dump(res, open(sys.argv[1] + ".ast", 'w'), 2)
-
+            print("AST:\n", res)
+            pickle.dump(res, open(sys.argv[1] + ".ast", 'wb'), 2)
+        elif mode == 'bytecode':
+            print('Sorry, bytecode is not supported yet (but planned). Please, use the -i or -c instead.')
         return 0
     except IOError as e:
         error('NOFILE', e.filename, e.strerror, e.errno, exc=0)
