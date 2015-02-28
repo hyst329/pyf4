@@ -18,11 +18,6 @@ def main():
         print("Usage: PyF4 infile.f4 [options]\n")
         return 0
     try:
-        cont = open(sys.argv[1], 'r').read()
-        if cont[-1] != '\n':
-            cont += '\n'
-        cont = to_string(preprocess(cont))
-        parser = f4parser.parser
         if len(sys.argv) == 2 or sys.argv[2] == '-i':
             mode = 'int'
         elif sys.argv[2] == '-c':
@@ -32,9 +27,15 @@ def main():
         else:
             print("Unknown format specified: '%s'" % sys.argv[2])
             return
-        res = parser.parse(cont)
-        # if parser.error:
-        # print "Error"
+        if mode in ('int', 'ast'):
+            cont = open(sys.argv[1], 'r').read()
+            if cont[-1] != '\n':
+                cont += '\n'
+            cont = to_string(preprocess(cont))
+            parser = f4parser.parser
+            res = parser.parse(cont)
+            # if parser.error:
+            # print "Error"
         if mode == 'int':
             print('Interpreting...')
             interpret(res)
@@ -42,7 +43,10 @@ def main():
             print("AST:\n", res)
             pickle.dump(res, open(sys.argv[1] + ".ast", 'wb'), 2)
         elif mode == 'bytecode':
-            print('Sorry, bytecode is not supported yet (but planned). Please, use the -i or -c instead.')
+            print("Experimental bytecode mode")
+            res = pickle.load(open(sys.argv[1], 'rb'))
+            print(res)
+            interpret(res)
         return 0
     except IOError as e:
         error('NOFILE', e.filename, e.strerror, e.errno, exc=0)

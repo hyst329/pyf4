@@ -114,12 +114,12 @@ def t_intlit(t):
     return t
 
 def t_chrlit(t):
-    r"""'[^('\)]'"""
+    r"""'[^(')]'"""
     t.value = t.value[1:-1]
     return t
 
 def t_strlit(t):
-    r""""[^('\)]+\""""
+    r""" "[^(")]+" """
     t.value = t.value[1:-1]
     return t
 
