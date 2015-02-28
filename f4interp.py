@@ -79,9 +79,12 @@ def evaluate(expr):
         except KeyError:
             error('NOVAR', expr[1])
     elif op == 'CALL':
-        r = call_function(expr[1], expr[2])
-        # print(r)
-        return r
+        try:
+            r = call_function(expr[1], expr[2])
+            # print(r)
+            return r
+        except TypeError:
+            error('TYPEMM', expr[1])
 
 
 def process(stat):
