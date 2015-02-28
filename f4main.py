@@ -6,7 +6,7 @@ from f4error import error
 from f4interp import interpret
 import f4parser
 from f4ppc import preprocess, to_string
-from f4ver import verstr
+from f4ver import verstr, vername
 
 __author__ = 'hyst329'
 
@@ -14,8 +14,8 @@ __author__ = 'hyst329'
 def main():
     if len(sys.argv) == 1:
         print("PyF4 --- F4PL implementation in Python\n")
-        print("Version %s" % verstr)
-        print("Usage: PyF4 infile.f4 [options]\n")
+        print("Version %s '%s'" % (verstr, vername))
+        print("Usage: f4main infile.f4 [options]\n")
         return 0
     try:
         if len(sys.argv) == 2 or sys.argv[2] == '-i':

@@ -2,7 +2,7 @@ from ply import yacc
 from f4error import error
 
 import f4lex
-from f4log import log
+# from f4log import log
 
 # Parsing file for F4 programming language
 __author__ = 'hyst329'
@@ -386,4 +386,5 @@ def p_error(p):
         error()
 
 
-parser = yacc.yacc(debug=True, debuglog=log)
+parser = yacc.yacc()
+# parser = yacc.yacc(debug=True, debuglog=log)
