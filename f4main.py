@@ -1,6 +1,7 @@
 import sys
 import pickle
 from termcolor import cprint
+from f4codegen import generate_cpp
 from f4error import error
 
 from f4interp import interpret
@@ -23,7 +24,9 @@ def main():
         elif sys.argv[2] == '-c':
             mode = 'ast'
         elif sys.argv[2] == '-b':
-            mode = 'bytecode'
+            mode = 'from_ast'
+        elif sys.argv[2] == '-g':
+            mode = 'gen_cpp'
         else:
             print("Unknown format specified: '%s'" % sys.argv[2])
             return
@@ -42,11 +45,13 @@ def main():
         elif mode == 'ast':
             print("AST:\n", res)
             pickle.dump(res, open(sys.argv[1] + ".ast", 'wb'), 2)
-        elif mode == 'bytecode':
-            print("Experimental bytecode mode")
+        elif mode == 'from_ast':
+            print("Experimental AST interpreting mode. May be unsafe")
             res = pickle.load(open(sys.argv[1], 'rb'))
             print(res)
             interpret(res)
+        elif mode == 'gen_cpp':
+            generate_cpp(res)
         return 0
     except IOError as e:
         error('NOFILE', e.filename, e.strerror, e.errno, exc=0)
