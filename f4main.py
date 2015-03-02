@@ -1,7 +1,7 @@
 import sys
 import pickle
 from termcolor import cprint
-from f4codegen import generate_cpp
+from f4codegen import generate_c
 from f4error import error
 
 from f4interp import interpret
@@ -26,11 +26,11 @@ def main():
         elif sys.argv[2] == '-b':
             mode = 'from_ast'
         elif sys.argv[2] == '-g':
-            mode = 'gen_cpp'
+            mode = 'gen_c'
         else:
             print("Unknown format specified: '%s'" % sys.argv[2])
             return
-        if mode in ('int', 'ast'):
+        if mode in ('int', 'ast', 'gen_c'):
             cont = open(sys.argv[1], 'r').read()
             if cont[-1] != '\n':
                 cont += '\n'
@@ -50,8 +50,8 @@ def main():
             res = pickle.load(open(sys.argv[1], 'rb'))
             print(res)
             interpret(res)
-        elif mode == 'gen_cpp':
-            generate_cpp(res)
+        elif mode == 'gen_c':
+            generate_c(res, open(sys.argv[1] + ".c", 'w'))
         return 0
     except IOError as e:
         error('NOFILE', e.filename, e.strerror, e.errno, exc=0)
