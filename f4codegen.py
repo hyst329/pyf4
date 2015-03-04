@@ -1,3 +1,5 @@
+from f4type import inferType
+
 __author__ = 'hyst329'
 
 _main = ""
@@ -10,6 +12,17 @@ c_types = {
     'STR': 'char*'
 }
 
+fspec = {
+    'INT': 'd',
+    'REAL': 'lf',
+    'CHAR': 'c',
+    'STRING': 's',
+    'STR': 's'
+}
+
+varmap = {}
+funmap = {}
+
 def generate_c(res, file):
     global _main
     print("Generating C file...")
@@ -19,21 +32,25 @@ def generate_c(res, file):
         traverse(stat, file)
     _main += "}\n"
     file.write(_main)
+    file.close()
+    print("Generating done")
 
 def traverse(stat, file, in_main=True):
     global _main
-    print(stat)
+    # print(stat)
     cmd = stat[0]
     if cmd == 'NEW':
         _write(c_types[stat[1]] + ' ', file, in_main)
         _write(stat[2] + " = ", file, in_main)
         _write(_expr(stat[3]), file, in_main)
         _write(';', file, in_main)
+        varmap[stat[2]] = stat[1]
     elif cmd == 'NEWARR':
         _write(c_types[stat[1]] + ' ', file, in_main)
         _write(stat[3] + "[", file, in_main)
         _write(_expr(stat[2]), file, in_main)
         _write('];', file, in_main)
+        varmap[stat[3]] = stat[1] + '.0'
     elif cmd == "MOV":
         var = stat[1][0]
         if stat[1][0] == 'ELEM':
@@ -42,9 +59,12 @@ def traverse(stat, file, in_main=True):
         _write(_expr(stat[2]), file, in_main)
         _write(';', file, in_main)
     elif cmd == "OUT":
-        _write('printf("%s", ' + _expr(stat[1]) + ");", file, in_main)
+        _write('printf("%' + fspec.get(inferType(stat[1], varmap, funmap), 'p') + '\\n", ' + _expr(stat[1]) + ");", file, in_main)
     elif cmd == "IN":
-        _write('scanf("%s", &' + _expr(stat[1]) + ");", file, in_main)
+        _write('scanf("%' + fspec[inferType(stat[1], varmap, funmap)] + '", &' + _expr(stat[1]) + ");", file, in_main)
+    elif cmd == 'FUN':
+        # TODO Write function calls
+        funmap[stat[1]] = stat[3]
     _write('\n', file, in_main)
 
 def _write(str, file, to_main=True):

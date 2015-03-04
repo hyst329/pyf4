@@ -21,7 +21,8 @@ errors = {
     'INERR': (17, 'Input error: must be identifier'),
     'OUTERR': (18, 'Output error: must be expression'),
     'NOTARR': (19, 'Argument "%s" is not an array'),
-    'TYPEMM': (20, 'Type mismatch when calling function "%s"')
+    'TYPEMM': (20, 'Type mismatch when calling function "%s"'),
+    'TPEREX': (21, 'Type error in expression')
 }
 
 

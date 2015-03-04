@@ -1,3 +1,4 @@
+import os
 import sys
 import pickle
 from termcolor import cprint
@@ -52,6 +53,8 @@ def main():
             interpret(res)
         elif mode == 'gen_c':
             generate_c(res, open(sys.argv[1] + ".c", 'w'))
+            fsize = os.stat(sys.argv[1] + ".c").st_size
+            print("%s bytes of C code generated" % fsize)
         return 0
     except IOError as e:
         error('NOFILE', e.filename, e.strerror, e.errno, exc=0)

@@ -4,7 +4,7 @@ version = {
     "major": 0,
     "minor": 3,
     "patch": 1,
-    "type": "beta",
+    "type": "prerelease",
     "name": "Helen"
 }
 
