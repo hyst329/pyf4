@@ -113,15 +113,18 @@ def t_intlit(t):
     t.value = int(t.value)
     return t
 
+
 def t_chrlit(t):
     r"""'[^(')]'"""
     t.value = t.value[1:-1]
     return t
 
+
 def t_strlit(t):
     r""" "[^(")]+" """
     t.value = t.value[1:-1]
     return t
+
 
 def t_error(t):
     error('INVTOK', t.value[0])

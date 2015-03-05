@@ -1,6 +1,7 @@
 import os
 import sys
 import pickle
+import subprocess
 from termcolor import cprint
 from f4codegen import generate_c
 from f4error import error
@@ -28,10 +29,12 @@ def main():
             mode = 'from_ast'
         elif sys.argv[2] == '-g':
             mode = 'gen_c'
+        elif sys.argv[2] == '-gc':
+            mode = 'gen_c_gcc'
         else:
             print("Unknown format specified: '%s'" % sys.argv[2])
             return
-        if mode in ('int', 'ast', 'gen_c'):
+        if mode in ('int', 'ast', 'gen_c', 'gen_c_gcc'):
             cont = open(sys.argv[1], 'r').read()
             if cont[-1] != '\n':
                 cont += '\n'
@@ -51,10 +54,30 @@ def main():
             res = pickle.load(open(sys.argv[1], 'rb'))
             print(res)
             interpret(res)
-        elif mode == 'gen_c':
+        elif mode in ('gen_c', 'gen_c_gcc'):
+            if mode == 'gen_c_gcc':
+                p = subprocess.Popen("gcc --version", stdout=open(os.devnull, "w"))
+                p.communicate()
+                if p.returncode:
+                    print("GCC not found or works incorrectly,"
+                          " but required to compile generated C code... Sorry :(")
+                    return
             generate_c(res, open(sys.argv[1] + ".c", 'w'))
             fsize = os.stat(sys.argv[1] + ".c").st_size
             print("%s bytes of C code generated" % fsize)
+            if mode == 'gen_c_gcc':
+                print("Compiling with GCC...")
+                p = subprocess.Popen('gcc ' + sys.argv[1] + ".c" + " -o " + sys.argv[1] + ".exe --std=c99",
+                                     stdout=open(os.devnull, "w"))
+                p.communicate()
+                if p.returncode:
+                    print("GCC cannot compile the generated code..."
+                          " This maybe was an error, either in your Helen code or"
+                          " in the codegen... Sorry :(")
+                    return
+                print("Executable written to %s with size of %s bytes,"
+                      " you can run it and test!" % (sys.argv[1] + ".exe",
+                                                     os.stat(sys.argv[1] + ".exe").st_size))
         return 0
     except IOError as e:
         error('NOFILE', e.filename, e.strerror, e.errno, exc=0)

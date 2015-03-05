@@ -7,6 +7,7 @@ REAL = "REAL"
 CHAR = "CHAR"
 STRING = "STRING"
 
+
 def inferType(expr, varmap, funmap):
     op = expr[0]
     if op in ('ADD', 'SUB', 'MUL'):
@@ -35,6 +36,7 @@ def inferType(expr, varmap, funmap):
 
 def getElementType(arrayType):
     return arrayType[0:arrayType.rfind('.')]
+
 
 def widestType(type1, type2):
     if type1 == type2:

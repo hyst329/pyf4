@@ -117,6 +117,7 @@ def p_instruction_resize(p):
     """instruction : resize ident lparen expression rparen"""
     p[0] = ('RESIZE', ('ID', p[2]), p[4])
 
+
 # Statement
 def p_statement_decl(p):
     """statement : declaration"""

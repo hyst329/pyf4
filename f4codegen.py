@@ -3,6 +3,7 @@ from f4type import inferType
 __author__ = 'hyst329'
 
 _main = ""
+_indent = 0
 
 c_types = {
     'INT': 'int',
@@ -25,11 +26,14 @@ funmap = {}
 
 BLANKOP = ("BLANK", )
 
+
 def generate_c(res, file):
-    global _main
+    global _main, _indent
+    _indent = 0
     print("Generating C file...")
     file.write("#include <stdio.h>\n")
-    _main = "int main() {\n"
+    _main = "int main()\n{\n"
+    _indent = 1
     for stat in res:
         traverse(stat, file)
     _main += "}\n"
@@ -37,10 +41,15 @@ def generate_c(res, file):
     file.close()
     print("Generating done")
 
-def traverse(stat, file, in_main=True, with_semi=True):
-    global _main
+
+def traverse(stat, file, in_main=True, with_semi=True, with_endline=True):
+    global _main, _indent
+    if stat == BLANKOP:
+        return
     end = ";" if with_semi else ""
-    print(stat)
+    if with_semi:
+        _write_indent(file, in_main)
+    # print(stat)
     cmd = stat[0]
     if cmd == 'NEW':
         _write(c_types[stat[1]] + ' ', file, in_main)
@@ -69,22 +78,39 @@ def traverse(stat, file, in_main=True, with_semi=True):
                + _expr(stat[1]) + ")" + end, file, in_main)
     elif cmd == "IF":
         _write("if (", file, in_main)
-        _write(_expr(stat[1]) + ")\n{\n", file, in_main)
+        _write(_expr(stat[1]) + ")\n", file, in_main)
+        _write_indent(file, in_main)
+        _write("{\n", file, in_main)
+        _indent += 1
         for s in stat[2]:
             traverse(s, file, in_main)
         if stat[3] != BLANKOP:
-            _write("}\nelse\n{", file, in_main)
+            _indent -= 1
+            _write_indent(file, in_main)
+            _write("}\n", file, in_main)
+            _write_indent(file, in_main)
+            _write("else\n", file, in_main)
+            _write_indent(file, in_main)
+            _write("{\n", file, in_main)
+            _indent += 1
             for s in stat[3]:
                 traverse(s, file, in_main)
+        _indent -= 1
+        _write_indent(file, in_main)
         _write("}", file, in_main)
     elif cmd == "LOOP":
         _write("for (", file, in_main)
-        traverse(stat[1], file, in_main)
+        traverse(stat[1], file, in_main, True, False)
         _write(_expr(stat[2]) + "; ", file, in_main)
-        traverse(stat[3], file, in_main, False)
-        _write(")\n{\n", file, in_main)
+        traverse(stat[3], file, in_main, False, False)
+        _write(")\n", file, in_main)
+        _write_indent(file, in_main)
+        _write("{\n", file, in_main)
+        _indent += 1
         for s in stat[4]:
-                traverse(s, file, in_main)
+            traverse(s, file, in_main)
+        _indent -= 1
+        _write_indent(file, in_main)
         _write("}", file, in_main)
     elif cmd == "FUN":
         funmap[stat[1]] = stat[3]
@@ -94,14 +120,17 @@ def traverse(stat, file, in_main=True, with_semi=True):
         for t in stat[2][0:-1]:
             _write(c_types[t[0]] + ' ' + t[1] + ', ', file, in_main)
         _write(c_types[stat[2][-1][0]] + ' ' + stat[2][-1][1], file, in_main)
-        _write(")\n{\n", file, in_main)
+        _write(")\n", file, in_main)
+        _write("{\n", file, in_main)
         for s in stat[4]:
             traverse(s, file, in_main)
         _write("}\n\n", file, in_main)
         in_main = True
     elif cmd == 'RET':
         _write("return" + _expr(stat[1]) + end, file, in_main)
-    _write('\n', file, in_main)
+    if with_endline:
+        _write('\n', file, in_main)
+
 
 def _write(str, file, to_main=True):
     global _main
@@ -109,6 +138,11 @@ def _write(str, file, to_main=True):
         _main += str
     else:
         file.write(str)
+
+
+def _write_indent(file, to_main=True):
+    _write(" " * 4 * _indent, file, to_main)
+
 
 def _expr(expr):
     op = expr[0]
@@ -119,17 +153,17 @@ def _expr(expr):
     elif op == 'MUL':
         return "(" + _expr(expr[1]) + " * " + _expr(expr[2]) + ")"
     elif op == 'DIV':
-        return "(" +_expr(expr[1]) + " / " + _expr(expr[2]) + ")"
+        return "(" + _expr(expr[1]) + " / " + _expr(expr[2]) + ")"
     elif op == 'EQL':
-        return "(" +_expr(expr[1]) + " == " + _expr(expr[2]) + ")"
+        return "(" + _expr(expr[1]) + " == " + _expr(expr[2]) + ")"
     elif op == 'LEQ':
-        return "(" +_expr(expr[1]) + " <= " + _expr(expr[2]) + ")"
+        return "(" + _expr(expr[1]) + " <= " + _expr(expr[2]) + ")"
     elif op == 'GEQ':
-        return "(" +_expr(expr[1]) + " >= " + _expr(expr[2]) + ")"
+        return "(" + _expr(expr[1]) + " >= " + _expr(expr[2]) + ")"
     elif op == 'LES':
-        return "(" +_expr(expr[1]) + " < " + _expr(expr[2]) + ")"
+        return "(" + _expr(expr[1]) + " < " + _expr(expr[2]) + ")"
     elif op == 'GTR':
-        return "(" +_expr(expr[1]) + " > " + _expr(expr[2]) + ")"
+        return "(" + _expr(expr[1]) + " > " + _expr(expr[2]) + ")"
     elif op == 'IND' or op == 'ELEM':
         return expr[1] + "[" + _expr(expr[2]) + "- 1]"
     elif op == 'NEG':
