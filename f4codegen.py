@@ -31,7 +31,7 @@ def generate_c(res, file):
     global _main, _indent
     _indent = 0
     print("Generating C file...")
-    file.write("#include <stdio.h>\n")
+    file.write('#include "f4helen.h"\n')
     _main = "int main()\n{\n"
     _indent = 1
     for stat in res:
@@ -71,7 +71,7 @@ def traverse(stat, file, in_main=True, with_semi=True, with_endline=True):
         _write(_expr(stat[2]), file, in_main)
         _write(end, file, in_main)
     elif cmd == "OUT":
-        _write('printf("%' + fspec.get(inferType(stat[1], varmap, funmap), 'p')
+        _write('f4_out("%' + fspec.get(inferType(stat[1], varmap, funmap), 'a')
                + '\\n", ' + _expr(stat[1]) + ")" + end, file, in_main)
     elif cmd == "IN":
         _write('scanf("%' + fspec[inferType(stat[1], varmap, funmap)] + '", &'

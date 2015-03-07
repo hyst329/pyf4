@@ -67,7 +67,10 @@ def main():
             print("%s bytes of C code generated" % fsize)
             if mode == 'gen_c_gcc':
                 print("Compiling with GCC...")
-                p = subprocess.Popen('gcc ' + sys.argv[1] + ".c" + " -o " + sys.argv[1] + ".exe --std=c99",
+                cmd = 'gcc ' + sys.argv[1] + ".c" + " -o " + sys.argv[1] + \
+                      '.exe --std=c99 -I"' + os.path.dirname(os.path.abspath(__file__)) + '/library"'
+                print("Calling %s" % cmd)
+                p = subprocess.Popen(cmd,
                                      stdout=open(os.devnull, "w"))
                 p.communicate()
                 if p.returncode:
