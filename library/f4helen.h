@@ -46,9 +46,19 @@ void f4_free(f4_array *a)
     free(a);
 }
 
-void f4_in(const char* format, ...)
+int f4_in(const char type, void* ptr)
 {
-
+   switch(type)
+    {
+    case 'c':
+        return scanf("%c", ptr);
+    case 'd':
+        return scanf("%d", ptr);
+    case 'f':
+        return scanf("%f", ptr);
+    case 's':
+        return scanf("%s", ptr);
+    }
 }
 
 void f4_out(const char* format, ...)

@@ -74,7 +74,7 @@ def traverse(stat, file, in_main=True, with_semi=True, with_endline=True):
         _write('f4_out("%' + fspec.get(inferType(stat[1], varmap, funmap), 'a')
                + '\\n", ' + _expr(stat[1]) + ")" + end, file, in_main)
     elif cmd == "IN":
-        _write('scanf("%' + fspec[inferType(stat[1], varmap, funmap)] + '", &'
+        _write("f4_in('" + fspec[inferType(stat[1], varmap, funmap)] + "', &"
                + _expr(stat[1]) + ")" + end, file, in_main)
     elif cmd == "IF":
         _write("if (", file, in_main)
