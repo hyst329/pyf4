@@ -9,6 +9,7 @@ from f4error import error
 from f4interp import interpret
 import f4parser
 from f4ppc import preprocess, to_string
+import f4ppc
 from f4ver import verstr, vername
 
 __author__ = 'hyst329'
@@ -34,6 +35,7 @@ def main():
         else:
             print("Unknown format specified: '%s'" % sys.argv[2])
             return
+        f4ppc.ppc_path[0:0] = [os.path.dirname(os.path.abspath(os.path.normpath(sys.argv[1])))]
         if mode in ('int', 'ast', 'gen_c', 'gen_c_gcc'):
             cont = open(sys.argv[1], 'r').read()
             if cont[-1] != '\n':

@@ -1,9 +1,10 @@
+import os
 from f4error import error
 
 __author__ = 'hyst329'
 
 used_modules = set()
-path = 'library/'
+ppc_path = ['library']
 
 
 def preprocess(raw):
@@ -23,7 +24,11 @@ def preprocess(raw):
                     mod = d[1]
                     if mod not in used_modules:
                         used_modules.add(mod)
-                        cont = open(path + mod.replace('.', '/') + '.f4', 'r').read()
+                        for p in ppc_path:
+                            path = p + "/" + mod.replace('.', '/') + '.f4'
+                            if os.path.exists(path):
+                                break
+                        cont = open(path, 'r').read()
                         l = preprocess(cont)
                 else:
                     error('INVDIR', d[0])
