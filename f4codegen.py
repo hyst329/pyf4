@@ -1,4 +1,4 @@
-from f4type import inferType
+from f4type import inferType, getElementType
 
 __author__ = 'hyst329'
 
@@ -49,7 +49,7 @@ def traverse(stat, file, in_main=True, with_semi=True, with_endline=True):
     end = ";" if with_semi else ""
     if with_semi:
         _write_indent(file, in_main)
-    # print(stat)
+    print(stat)
     cmd = stat[0]
     if cmd == 'NEW':
         _write(c_types[stat[1]] + ' ', file, in_main)
@@ -58,15 +58,19 @@ def traverse(stat, file, in_main=True, with_semi=True, with_endline=True):
         _write(end, file, in_main)
         varmap[stat[2]] = stat[1]
     elif cmd == 'NEWARR':
-        _write(c_types[stat[1]] + ' ', file, in_main)
-        _write(stat[3] + "[", file, in_main)
-        _write(_expr(stat[2]), file, in_main)
-        _write(']' + end, file, in_main)
+        # _write(c_types[stat[1]] + ' ', file, in_main)
+        # _write(stat[3] + "[", file, in_main)
+        # _write(_expr(stat[2]), file, in_main)
+        # _write(']' + end, file, in_main)
+        _write("f4_array* " + stat[3] + " = f4_new('", file, in_main)
+        _write(fspec[stat[1]] + "', " + _expr(stat[2]) + ")" + end, file, in_main)
         varmap[stat[3]] = stat[1] + '.0'
     elif cmd == "MOV":
         var = stat[1][0]
         if stat[1][0] == 'ELEM':
-            var = stat[1][1] + "[" + _expr(stat[1][2]) + " - 1]"
+            # var = stat[1][1] + "->array[" + _expr(stat[1][2]) + " - 1]"
+            var = "((" + c_types[getElementType(varmap[stat[1][1]])] + "*)(" + \
+                  stat[1][1] + "->array))[" + _expr(stat[1][2]) + " - 1]"
         _write(var + " = ", file, in_main)
         _write(_expr(stat[2]), file, in_main)
         _write(end, file, in_main)
@@ -114,6 +118,7 @@ def traverse(stat, file, in_main=True, with_semi=True, with_endline=True):
         _write("}", file, in_main)
     elif cmd == "FUN":
         funmap[stat[1]] = stat[3]
+        old_in_main = in_main
         in_main = False
         _write(c_types[stat[3]] + ' ' + stat[1], file, in_main)
         _write("(", file, in_main)
@@ -125,7 +130,9 @@ def traverse(stat, file, in_main=True, with_semi=True, with_endline=True):
         for s in stat[4]:
             traverse(s, file, in_main)
         _write("}\n\n", file, in_main)
-        in_main = True
+        in_main = old_in_main
+    elif cmd == "RESIZE":
+        _write("f4_resize(" + stat[1][1] + ", " + _expr(stat[2]) + ")" + end, file, in_main)
     elif cmd == 'RET':
         _write("return" + _expr(stat[1]) + end, file, in_main)
     if with_endline:
@@ -164,8 +171,8 @@ def _expr(expr):
         return "(" + _expr(expr[1]) + " < " + _expr(expr[2]) + ")"
     elif op == 'GTR':
         return "(" + _expr(expr[1]) + " > " + _expr(expr[2]) + ")"
-    elif op == 'IND' or op == 'ELEM':
-        return expr[1] + "[" + _expr(expr[2]) + "- 1]"
+    elif op in ('IND', 'ELEM'):
+        return "((" + c_types[getElementType(varmap[expr[1]])] + "*)(" + expr[1] + "->array))[" + _expr(expr[2]) + "- 1]"
     elif op == 'NEG':
         return "-" + _expr(expr[1])
     elif op in ('INT', 'REAL', 'CHAR', 'STR'):

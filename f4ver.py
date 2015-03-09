@@ -3,8 +3,8 @@ __author__ = 'hyst329'
 version = {
     "major": 0,
     "minor": 3,
-    "patch": 1,
-    "type": "release",
+    "patch": 2,
+    "type": "experimental",
     "name": "Helen"
 }
 
