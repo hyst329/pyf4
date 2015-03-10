@@ -19,23 +19,63 @@ f4_array* f4_new(char type, unsigned int size)
     {
     case 'c':
         elem_size = sizeof(char);
+        break;
     case 'd':
         elem_size = sizeof(int);
+        break;
     case 'f':
         elem_size = sizeof(double);
+        break;
     case 's':
         elem_size = sizeof(char *);
+        break;
     }
     a->elem_size = elem_size;
     a->array = malloc(elem_size * size);
     a->type = type;
     a->size = size;
+    for(int i = 0; i < a->size; i++)
+    {
+        switch(a->type)
+        {
+        case 'c':
+            ((char*)(a->array))[i] = '\0';
+            break;
+        case 'd':
+            ((int*)(a->array))[i] = 0;
+            break;
+        case 'f':
+            ((double*)(a->array))[i] = 0.0;
+            break;
+        case 's':
+            ((char**)(a->array))[i] = NULL;
+            break;
+        }
+    }
     return a;
 }
 
 void f4_resize(f4_array* a, unsigned int new_size)
 {
     a->array = realloc(a->array, a->elem_size * new_size);
+    for(int i = a->size; i < new_size; i++)
+    {
+        switch(a->type)
+        {
+        case 'c':
+            ((char*)(a->array))[i] = '\0';
+            break;
+        case 'd':
+            ((int*)(a->array))[i] = 0;
+            break;
+        case 'f':
+            ((double*)(a->array))[i] = 0.0;
+            break;
+        case 's':
+            ((char**)(a->array))[i] = NULL;
+            break;
+        }
+    }
     a->size = a->array ? new_size : 0;
 }
 
@@ -113,22 +153,23 @@ void f4_out(const char* format, ...)
                 {
                 case 'c':
                     for(int i = 0; i < arr->size; i++)
-                        f += sprintf(f, "%c ", ((char*)(arr->array))[i]);
+                        f += sprintf(f, "%c, ", ((char*)(arr->array))[i]);
                     break;
                 case 'd':
                     for(int i = 0; i < arr->size; i++)
-                        f += sprintf(f, "%d ", ((int*)(arr->array))[i]);
+                        f += sprintf(f, "%d, ", ((int*)(arr->array))[i]);
                     break;
                 case 'f':
                     for(int i = 0; i < arr->size; i++)
-                        f += sprintf(f, "%f ", ((double*)(arr->array))[i]);
+                        f += sprintf(f, "%f, ", ((double*)(arr->array))[i]);
                     break;
                 case 's':
                     for(int i = 0; i < arr->size; i++)
-                        f += sprintf(f, "%s ", ((char**)(arr->array))[i]);
+                        f += sprintf(f, "%s, ", ((char**)(arr->array))[i]);
                     break;
                 }
-                *f = ']';
+                f[-2] = ']';
+                f[-1] = 0;
                 fputs(fmtbuf, stdout);
                 break;
 

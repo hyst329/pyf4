@@ -14,7 +14,7 @@ def inferType(expr, varmap, funmap):
         return widestType(inferType(expr[1], varmap, funmap), inferType(expr[2], varmap, funmap))
     elif op == 'DIV':
         return REAL if inferType(expr[1], varmap, funmap) == inferType(expr[2], varmap, funmap) == INT else widestType()
-    elif op in ('EQL', 'LES', 'GTR', 'LEQ', 'GEQ'):
+    elif op in ('EQL', 'LES', 'GTR', 'LEQ', 'GEQ', 'SIZE'):
         return INT
     elif op == 'IND' or op == 'ELEM':
         return getElementType(varmap[expr[1]])
