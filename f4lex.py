@@ -50,6 +50,7 @@ keywords = (
     'return',
     'use',
     'resize',
+    'size',
     # Basic types
     'int',
     'real',

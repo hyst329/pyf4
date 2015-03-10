@@ -42,8 +42,9 @@ def generate_c(res, file):
     print("Generating done")
 
 
-def traverse(stat, file, in_main=True, with_semi=True, with_endline=True):
+def traverse(stat, file, cur_fun=None, with_semi=True, with_endline=True):
     global _main, _indent
+    in_main = not cur_fun
     if stat == BLANKOP:
         return
     end = ";" if with_semi else ""
@@ -87,7 +88,7 @@ def traverse(stat, file, in_main=True, with_semi=True, with_endline=True):
         _write("{\n", file, in_main)
         _indent += 1
         for s in stat[2]:
-            traverse(s, file, in_main)
+            traverse(s, file, cur_fun)
         if stat[3] != BLANKOP:
             _indent -= 1
             _write_indent(file, in_main)
@@ -98,27 +99,29 @@ def traverse(stat, file, in_main=True, with_semi=True, with_endline=True):
             _write("{\n", file, in_main)
             _indent += 1
             for s in stat[3]:
-                traverse(s, file, in_main)
+                traverse(s, file, cur_fun)
         _indent -= 1
         _write_indent(file, in_main)
         _write("}", file, in_main)
     elif cmd == "LOOP":
         _write("for (", file, in_main)
-        traverse(stat[1], file, in_main, True, False)
+        traverse(stat[1], file, cur_fun, True, False)
         _write(_expr(stat[2]) + "; ", file, in_main)
-        traverse(stat[3], file, in_main, False, False)
+        traverse(stat[3], file, cur_fun, False, False)
         _write(")\n", file, in_main)
         _write_indent(file, in_main)
         _write("{\n", file, in_main)
         _indent += 1
         for s in stat[4]:
-            traverse(s, file, in_main)
+            traverse(s, file, cur_fun)
         _indent -= 1
         _write_indent(file, in_main)
         _write("}", file, in_main)
     elif cmd == "FUN":
         funmap[stat[1]] = stat[3]
         old_in_main = in_main
+        old_cur_fun = cur_fun
+        cur_fun = stat[1]
         in_main = False
         _write(c_types[stat[3]] + ' ' + stat[1], file, in_main)
         _write("(", file, in_main)
@@ -128,9 +131,10 @@ def traverse(stat, file, in_main=True, with_semi=True, with_endline=True):
         _write(")\n", file, in_main)
         _write("{\n", file, in_main)
         for s in stat[4]:
-            traverse(s, file, in_main)
+            traverse(s, file, cur_fun)
         _write("}\n\n", file, in_main)
         in_main = old_in_main
+        cur_fun = old_cur_fun
     elif cmd == "RESIZE":
         _write("f4_resize(" + stat[1][1] + ", " + _expr(stat[2]) + ")" + end, file, in_main)
     elif cmd == 'RET':
@@ -179,6 +183,8 @@ def _expr(expr):
         return "(" + c_types[op] + ")(" + _literal(op, expr[1]) + ")"
     elif op == 'ID':
         return expr[1]
+    elif op == 'SIZE':
+        return expr[1] + "->size"
     elif op == 'CALL':
         ret = expr[1] + "("
         for e in expr[2][0:-1]:

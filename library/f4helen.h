@@ -112,14 +112,24 @@ void f4_out(const char* format, ...)
                 switch(arr->type)
                 {
                 case 'c':
+                    for(int i = 0; i < arr->size; i++)
+                        f += sprintf(f, "%c ", ((char*)(arr->array))[i]);
                     break;
                 case 'd':
+                    for(int i = 0; i < arr->size; i++)
+                        f += sprintf(f, "%d ", ((int*)(arr->array))[i]);
                     break;
                 case 'f':
+                    for(int i = 0; i < arr->size; i++)
+                        f += sprintf(f, "%f ", ((double*)(arr->array))[i]);
                     break;
                 case 's':
+                    for(int i = 0; i < arr->size; i++)
+                        f += sprintf(f, "%s ", ((char**)(arr->array))[i]);
                     break;
                 }
+                *f = ']';
+                fputs(fmtbuf, stdout);
                 break;
 
             case '%':

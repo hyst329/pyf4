@@ -323,6 +323,9 @@ def p_factor_fun(p):
     """factor : ident lparen exprlist rparen"""
     p[0] = ('CALL', p[1], p[3])
 
+def p_factor_size(p):
+    """factor : size ident"""
+    p[0] = ('SIZE', p[2])
 
 # Declaration
 def p_declaration_ident(p):

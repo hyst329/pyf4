@@ -85,6 +85,8 @@ def evaluate(expr):
             return r
         except TypeError:
             error('TYPEMM', expr[1])
+    elif op == 'SIZE':
+        return len(varmap[expr[1]][1])
 
 
 def process(stat):
