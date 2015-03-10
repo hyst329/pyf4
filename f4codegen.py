@@ -105,7 +105,10 @@ def traverse(stat, file, cur_fun=None, with_semi=True, with_endline=True):
         _write("}", file, in_main)
     elif cmd == "LOOP":
         _write("for (", file, in_main)
+        _old_indent = _indent
+        _indent = 0
         traverse(stat[1], file, cur_fun, True, False)
+        _indent = _old_indent
         _write(_expr(stat[2]) + "; ", file, in_main)
         traverse(stat[3], file, cur_fun, False, False)
         _write(")\n", file, in_main)
