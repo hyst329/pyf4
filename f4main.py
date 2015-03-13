@@ -69,8 +69,12 @@ def main():
             print("%s bytes of C code generated" % fsize)
             if mode == 'gen_c_gcc':
                 print("Compiling with GCC...")
+                if getattr(sys, 'frozen', False):
+                    rundir = os.path.dirname(sys.executable)
+                else:
+                    rundir = os.path.dirname(os.path.realpath(__file__))
                 cmd = 'gcc ' + sys.argv[1] + ".c" + " -o " + sys.argv[1] + \
-                      '.exe --std=c99 -I"' + os.path.dirname(os.path.abspath(__file__)) + '/library"'
+                      '.exe --std=c99 -I"' + rundir + '/library"'
                 print("Calling %s" % cmd)
                 p = subprocess.Popen(cmd,
                                      stdout=open(os.devnull, "w"))
