@@ -141,7 +141,7 @@ def traverse(stat, file, cur_fun=None, with_semi=True, with_endline=True):
     elif cmd == "RESIZE":
         _write("f4_resize(" + stat[1][1] + ", " + _expr(stat[2]) + ")" + end, file, in_main)
     elif cmd == 'RET':
-        _write("return" + _expr(stat[1]) + end, file, in_main)
+        _write("return " + _expr(stat[1]) + end, file, in_main)
     if with_endline:
         _write('\n', file, in_main)
 
