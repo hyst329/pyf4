@@ -102,6 +102,16 @@ def p_instruction_funvoid(p):
     p[0] = ('FUN', p[2], p[4], None, p[6])
 
 
+def p_instruction_funnoargs(p):
+    """instruction : fun ident rarrow type newline instseq endfun"""
+    p[0] = ('FUN', p[2], None, p[4], p[6])
+
+
+def p_instruction_funvoidnoargs(p):
+    """instruction : fun ident newline instseq endfun"""
+    p[0] = ('FUN', p[2], None, None, p[4])
+
+
 # Functions --- return
 def p_instruction_return(p):
     """instruction : return expression"""
@@ -323,9 +333,16 @@ def p_factor_fun(p):
     """factor : ident lparen exprlist rparen"""
     p[0] = ('CALL', p[1], p[3])
 
+
+def p_factor_funnoargs(p):
+    """factor : ident lparen rparen"""
+    p[0] = ('CALL', p[1], None)
+
+
 def p_factor_size(p):
     """factor : size ident"""
     p[0] = ('SIZE', p[2])
+
 
 # Declaration
 def p_declaration_ident(p):

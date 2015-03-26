@@ -179,7 +179,8 @@ def _expr(expr):
     elif op == 'GTR':
         return "(" + _expr(expr[1]) + " > " + _expr(expr[2]) + ")"
     elif op in ('IND', 'ELEM'):
-        return "((" + c_types[getElementType(varmap[expr[1]])] + "*)(" + expr[1] + "->array))[" + _expr(expr[2]) + "- 1]"
+        return "((" + c_types[getElementType(varmap[expr[1]])] + "*)(" + expr[1] + "->array))[" + _expr(
+            expr[2]) + "- 1]"
     elif op == 'NEG':
         return "-" + _expr(expr[1])
     elif op in ('INT', 'REAL', 'CHAR', 'STR'):
