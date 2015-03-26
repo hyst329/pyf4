@@ -1,7 +1,7 @@
 pyf4
 ====
 
-Python implementation of the F4PL. Uses PLY (Python Lex-Yacc). Requires Python 3.
+Python implementation of the F4/Helen programming language. Uses PLY (Python Lex-Yacc). Requires Python 3.
 
 Information about the syntax you can find on the project wiki.
 
