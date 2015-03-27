@@ -22,7 +22,8 @@ errors = {
     'OUTERR': (18, 'Output error: must be expression'),
     'NOTARR': (19, 'Argument "%s" is not an array'),
     'TYPEMM': (20, 'Type mismatch when calling function "%s"'),
-    'TPEREX': (21, 'Type error in expression')
+    'TPEREX': (21, 'Type error in expression'),
+    'ARGCER': (22, 'Argument count error in function %s: %s needed, %s provided')
 }
 
 
