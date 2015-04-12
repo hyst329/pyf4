@@ -114,12 +114,12 @@ def p_funprot_void(p):
 
 def p_funprot_noargs(p):
     """funprot : ident rarrow type"""
-    p[0] = (p[1], None, p[3])
+    p[0] = (p[1], (), p[3])
 
 
 def p_funprot_voidnoargs(p):
     """funprot : ident"""
-    p[0] = (p[1], None, None)
+    p[0] = (p[1], (), None)
 
 
 # Functions --- return
