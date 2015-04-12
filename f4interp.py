@@ -24,15 +24,16 @@ def interpret(ast):
 
 def call_function(name, args):
     global current_functions, return_value
-    # return_value = None
+    return_value = None
     i = 0
-    # print(args)
     argsc = copy.deepcopy(args)
     while i < len(args):
         argsc[i] = evaluate(args[i])
         i += 1
     f = functions[name]
     i = 0
+    if len(f[0]) != len(argsc):
+        error('ARGCER', name, len(f[0]), len(argsc))
     for a in f[0]:
         f[3][a[1]] = (a[0], argsc[i])
         i += 1
@@ -168,6 +169,8 @@ def process(stat):
         elif oldsize < newsize:
             for i in range(newsize - oldsize):
                 arr.append(defvals[varmap[name[1]][0].split('.')[0]])
+    elif instr == 'EXPR':
+        evaluate(stat[1])
 
 
 def to_type(t, v):

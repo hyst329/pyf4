@@ -126,11 +126,12 @@ def traverse(stat, file, cur_fun=None, with_semi=True, with_endline=True):
         old_cur_fun = cur_fun
         cur_fun = stat[1]
         in_main = False
-        _write(c_types[stat[3]] + ' ' + stat[1], file, in_main)
+        _write(c_types.get(stat[3], "void") + ' ' + stat[1], file, in_main)
         _write("(", file, in_main)
         for t in stat[2][0:-1]:
             _write(c_types[t[0]] + ' ' + t[1] + ', ', file, in_main)
-        _write(c_types[stat[2][-1][0]] + ' ' + stat[2][-1][1], file, in_main)
+        if stat[2]:
+            _write(c_types[stat[2][-1][0]] + ' ' + stat[2][-1][1], file, in_main)
         _write(")\n", file, in_main)
         _write("{\n", file, in_main)
         for s in stat[4]:
@@ -142,6 +143,8 @@ def traverse(stat, file, cur_fun=None, with_semi=True, with_endline=True):
         _write("f4_resize(" + stat[1][1] + ", " + _expr(stat[2]) + ")" + end, file, in_main)
     elif cmd == 'RET':
         _write("return " + _expr(stat[1]) + end, file, in_main)
+    elif cmd == "EXPR":
+        _write(_expr(stat[1]) + end, file, in_main)
     if with_endline:
         _write('\n', file, in_main)
 
@@ -193,7 +196,8 @@ def _expr(expr):
         ret = expr[1] + "("
         for e in expr[2][0:-1]:
             ret += _expr(e) + ", "
-        ret += _expr(expr[2][-1])
+        if expr[2]:
+            ret += _expr(expr[2][-1])
         ret += ")"
         return ret
 

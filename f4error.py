@@ -24,6 +24,8 @@ errors = {
     'TYPEMM': (20, 'Type mismatch when calling function "%s"'),
     'TPEREX': (21, 'Type error in expression'),
     'NODECL': (22, 'Unable to call declared function "%s" in interpreter mode')
+    'TPEREX': (21, 'Type error in expression'),
+    'ARGCER': (22, 'Argument count error in function %s: %s needed, %s provided')
 }
 
 

@@ -93,13 +93,13 @@ def p_instruction_loop(p):
 
 # Functions
 def p_instruction_fun(p):
-    """instruction : fun funprot newline instseq endfun"""
-    p[0] = ('FUN', p[2][0], p[2][1], p[2][2], p[4])
+    """instruction : fun ident colon arglist rarrow type newline instseq endfun"""
+    p[0] = ('FUN', p[2], p[4], p[6], p[8])
 
 
-def p_instruction_declare(p):
-    """instruction : declare fun funprot"""
-    p[0] = ('DECL', p[3][0], p[3][1], p[3][2])
+def p_instruction_funvoid(p):
+    """instruction : fun ident colon arglist newline instseq endfun"""
+    p[0] = ('FUN', p[2], p[4], None, p[6])
 
 
 def p_funprot(p):
@@ -178,6 +178,10 @@ def p_statement_ass(p):
     """statement : assignment"""
     p[0] = p[1]
 
+
+def p_statement_expr(p):
+    """statement : expression"""
+    p[0] = ('EXPR', p[1])
 
 def p_statement_debugvar(p):
     """statement : debugvar """
@@ -346,7 +350,7 @@ def p_factor_fun(p):
 
 def p_factor_funnoargs(p):
     """factor : ident lparen rparen"""
-    p[0] = ('CALL', p[1], None)
+    p[0] = ('CALL', p[1], ())
 
 
 def p_factor_size(p):
