@@ -45,6 +45,7 @@ keywords = (
     'endif',
     'fun',
     'endfun',
+    'declare',
     'loop',
     'endloop',
     'return',

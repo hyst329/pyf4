@@ -93,23 +93,33 @@ def p_instruction_loop(p):
 
 # Functions
 def p_instruction_fun(p):
-    """instruction : fun ident colon arglist rarrow type newline instseq endfun"""
-    p[0] = ('FUN', p[2], p[4], p[6], p[8])
+    """instruction : fun funprot newline instseq endfun"""
+    p[0] = ('FUN', p[2][0], p[2][1], p[2][2], p[4])
 
 
-def p_instruction_funvoid(p):
-    """instruction : fun ident colon arglist newline instseq endfun"""
-    p[0] = ('FUN', p[2], p[4], None, p[6])
+def p_instruction_declare(p):
+    """instruction : declare fun funprot"""
+    p[0] = ('DECL', p[3][0], p[3][1], p[3][2])
 
 
-def p_instruction_funnoargs(p):
-    """instruction : fun ident rarrow type newline instseq endfun"""
-    p[0] = ('FUN', p[2], None, p[4], p[6])
+def p_funprot(p):
+    """funprot : ident colon arglist rarrow type"""
+    p[0] = (p[1], p[3], p[5])
 
 
-def p_instruction_funvoidnoargs(p):
-    """instruction : fun ident newline instseq endfun"""
-    p[0] = ('FUN', p[2], None, None, p[4])
+def p_funprot_void(p):
+    """funprot : ident colon arglist"""
+    p[0] = (p[1], p[3], None)
+
+
+def p_funprot_noargs(p):
+    """funprot : ident rarrow type"""
+    p[0] = (p[1], None, p[3])
+
+
+def p_funprot_voidnoargs(p):
+    """funprot : ident"""
+    p[0] = (p[1], None, None)
 
 
 # Functions --- return
