@@ -139,6 +139,16 @@ def traverse(stat, file, cur_fun=None, with_semi=True, with_endline=True):
         _write("}\n\n", file, in_main)
         in_main = old_in_main
         cur_fun = old_cur_fun
+    elif cmd == "DECL":
+        funmap[stat[1]] = stat[3]
+        _write("extern " + c_types.get(stat[3], "void") + ' ' + stat[1], file, in_main)
+        _write("(", file, in_main)
+        for t in stat[2][0:-1]:
+            _write(c_types[t[0]] + ' ' + t[1] + ', ', file, in_main)
+        if stat[2]:
+            _write(c_types[stat[2][-1][0]] + ' ' + stat[2][-1][1], file, in_main)
+        _write(")" + end, file, in_main)
+        pass
     elif cmd == "RESIZE":
         _write("f4_resize(" + stat[1][1] + ", " + _expr(stat[2]) + ")" + end, file, in_main)
     elif cmd == 'RET':

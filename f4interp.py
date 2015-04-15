@@ -13,6 +13,7 @@ defvals = {
 }
 
 functions = {}
+declared_functions = {}
 current_functions = []
 return_value = None
 
@@ -30,6 +31,11 @@ def call_function(name, args):
     while i < len(args):
         argsc[i] = evaluate(args[i])
         i += 1
+    if name not in functions:
+        if name in declared_functions:
+            error('NODECL', name)
+        else:
+            error('NOFUN', name)
     f = functions[name]
     i = 0
     if len(f[0]) != len(argsc):
@@ -154,6 +160,9 @@ def process(stat):
     elif instr == 'FUN':
         name, args, retn, body = stat[1], stat[2], stat[3], stat[4]
         functions[name] = (args, body, retn, {})
+    elif instr == 'DECL':
+        name, args, retn = stat[1], stat[2], stat[3]
+        declared_functions[name] = (args, None, retn, {})
     elif instr == 'RET':
         return_value = evaluate(stat[1])
         # print("Returned %s" % return_value)
